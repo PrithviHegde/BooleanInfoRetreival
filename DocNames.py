@@ -26,8 +26,8 @@ import re
 # naming the lemmatizer
 lemmatizer = nltk.WordNetLemmatizer()
 
-# Store names of txt files in dictionaries
 dirList = os.listdir()
+''' Store names of files in dictionaries '''
 
 # dictionary with documentID as key
 documentList = {}
@@ -36,55 +36,69 @@ documentList = {}
 invertedDocumentList = {}
 docCounter = 1
 
-for i in dirList:
-    if(i[-3:] == "txt"):
-        documentList[docCounter] = i
-        invertedDocumentList[i] = docCounter
+for file in dirList:
+    # if txt file then 
+    if(file[-3:] == "txt"):
+        documentList[docCounter] = file
+        invertedDocumentList[file] = docCounter
         docCounter += 1
 
+# number of documents
 documentCount = len(documentList)
-''' Number of documents '''
 
 # Query input function, input is the query and returns the individual words of query in a list.
 # for example: 
 # calpurnia AND ceasar --> ['calpurnia', 'and', 'ceasar']
 # Calpurnia AND Ceasar OR NOT Brutus --> ['calpurnia', 'and', 'ceasar', 'or', 'not', 'brutus']
 
-# using the stopwords provided in nltk package?
+# using the stopwords provided in nltk package
 stopWords = set(nltk.corpus.stopwords.words('english'))
 
 def InvertedIndex(documentList):
+    '''Makes a inverted index table and a bigram inverted index table for the documents in the corpus'''
     # input is the document list in the corpus
     InvertedIndexTable = {}
     BiGramInvertedIndex = {}
+    
     for docID in documentList:
         # opens and read the doc accessed thru docID
         fo = open(str(documentList[docID]))
         rawText = fo.read()
         
-        # splits on the space, special chars and numbers in the docs
+        # splits on the spaces, special chars and numbers in the docs
         words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\*\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawText)
         
-        # lemmatizing the words obtained from the doc after removing the space, special chars and numbers
+        # lemmatizing the words obtained from the doc after spliting
         for word in words:
             lemmatizedWord = lemmatizer.lemmatize(word)
             lemmatizedWord = lemmatizedWord.lower()
+            
             # skipping the word if it is a stopword
             if lemmatizedWord in stopWords:
                 continue
+            
+            # editing word for bigram inverted index table
+            # adding '$' as prefix and suffix to lemmatized word
             biwordinput = '$' + lemmatizedWord + '$'
+            
+            # if empty string, move to next word
             if biwordinput == '$$':
                 continue
+            
+            # creating a bigram inverted index table
             for i in range(len(biwordinput) - 1):
                 biword = biwordinput[i:i+2]
+                # if bigram word already present, then append the satisfying the lemmatized word 
+                # else bigram not present, add 
                 if biword in BiGramInvertedIndex:
                     BiGramInvertedIndex[biword].append(lemmatizedWord)
                 else:
                     BiGramInvertedIndex[biword] = [lemmatizedWord]
-            # if lemmatized word not present in the inverted index table
-            #   then lemmatized words as key and the docID of doc containing it
-            #   (values of docID is a set to ensuring no duplicates)
-            # else if present, then add the docID of doc containing the lemmatized word(key)
+            
+            # creating inverted index table
+            # if lemmatized word present, then add the docID of doc containing the lemmatized word(key)
+            # else append the docID of doc to lemmatized word as key
+            # values of docID is a set to ensuring no duplicates
             if lemmatizedWord in InvertedIndexTable:
                 InvertedIndexTable[lemmatizedWord].add(docID)
             else:
@@ -94,16 +108,15 @@ def InvertedIndex(documentList):
     for word in InvertedIndexTable:
         InvertedIndexTable[word] = list(InvertedIndexTable[word])
         
-    # returning the complete inverted index table
+    # returns inverted index table and biGram inverted index table
     return InvertedIndexTable, BiGramInvertedIndex
 
 
 def LevenshteinDistance(str1, str2):
-# Function to calculate the LevenshteinDistance or the mininum edit distance; 
-# used for spell check takes two strings as input, 
-# str1 –> first word s
-# tr2 –> second word; 
-
+    '''Calculates the LevenshteinDistance or the mininum edit distance'''
+    
+    # str1 –> first word input
+    # str2 –> second word input; 
     str1Length = len(str1)
     str2Length = len(str2)
 
@@ -118,12 +131,14 @@ def LevenshteinDistance(str1, str2):
     for i in range(1,str1Length+1):
         for j in range(1,str2Length+1):
             LevenshteinArray[i][j] = min(LevenshteinArray[i-1][j-1] + (0 if str1[i-1] == str2[j-1] else 1), (LevenshteinArray[i-1][j] +1), (LevenshteinArray[i][j-1] +1))
+            
     # returns the levenshtein distance between str1 and str2
     return LevenshteinArray[str1Length][str2Length]
 
 
 def QueryPreProccess(rawQuery):
-    # funciton pre-processs the rawQuery
+    '''Pre-processses the rawQuery'''
+    
     # Spaces, special chars and numbers removed from the query (as they were removed when making the inverted index table)
     words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawQuery)
     ind = 0
@@ -134,9 +149,9 @@ def QueryPreProccess(rawQuery):
         lemmatizedWord = lemmatizer.lemmatize(word)
         lemmatizedWord = lemmatizedWord.lower()
         
-        # bit operation as words in the query are ignored
+        # boolean operation as words and wildcard query symbol(*) in the query are ignored
         if (word in ('and', 'or', 'not')) or ('*' in word) :
-            # index increased as bit operation remain the same after spell check of the queries
+            # index increased 
             ind += 1
             continue
 
@@ -145,7 +160,7 @@ def QueryPreProccess(rawQuery):
         
         for dictword in InvertedIndex1:
             
-            # calculating the levenshtein distance of query word and word in the inverted index table
+            # calculating the levenshtein distance of queryWord and word in the inverted index table
             dist = LevenshteinDistance(word,dictword)
             
             # updates the queryWord with word in inverted index table with minimun levenshtein distance 
@@ -156,7 +171,7 @@ def QueryPreProccess(rawQuery):
         words[ind] = ans[0]
         ind += 1
     
-    # list for the final query after skipping stop words and the bit operation words
+    # final query after skipping stop words and the boolean operation words
     # contains the main queryWords after spell correction
     finalWordList = []
     for word in words:
@@ -171,98 +186,64 @@ def QueryPreProccess(rawQuery):
     # removes the extra space after the last word
     resultStr.strip()
     
-    # Returns the querywords as a list after spell correction and removing the stop words, bit operation words 
+    # Returns the querywords as a list after spell correction 
+    # and removed the stop words, boolean operation words 
     return resultStr
-    
-''' Trie class and TrieNode '''
-class TrieNode:
-    # Trie node class
-    def __init__(self):
-        self.children = [None]*26
- 
-        # isEndOfWord is True if node represent the end of the word
-        self.isEndOfWord = False
-
-class Trie:
-    # Trie data structure class
-    def __init__(self):
-        self.root = self.getNode()
- 
-    def getNode(self):
-        # Returns new trie node (initialized to NULLs)
-        return TrieNode()
- 
-    def _charToIndex(self,ch):
-        # private helper function
-        # Converts key current character into index
-        # use only 'a' through 'z' and lower case
-        return ord(ch)-ord('a')
- 
-    def insert(self,key):
-        # If not present, inserts key into trie
-        # If the key is prefix of trie node,
-        # just marks leaf node
-        pCrawl = self.root
-        length = len(key)
-        for level in range(length):
-            index = self._charToIndex(key[level])
- 
-            # if current character is not present
-            if not pCrawl.children[index]:
-                pCrawl.children[index] = self.getNode()
-            pCrawl = pCrawl.children[index]
- 
-        # mark last node as leaf
-        pCrawl.isEndOfWord = True
- 
-    def search(self, key):
-        # Search key in the trie
-        # Returns true if key presents
-        # in trie, else false
-        pCrawl = self.root
-        length = len(key)
-        for level in range(length):
-            index = self._charToIndex(key[level])
-            if not pCrawl.children[index]:
-                return False
-            pCrawl = pCrawl.children[index]
- 
-        return pCrawl.isEndOfWord
-
-
+     
 def BigramQuery(word):
+    '''Converting input wildcard query for Bi-Gram Query search'''
+    # making the query ready for bigram search
     word = '$' + word + '$'
+    
+    # splits on '*' for wildcard query searches
     wordList = word.split('*')
+    
+    # empty list
     bigrams = []
+    
+    # making bigrams from the input wildcardQuery
     for elem in wordList:
         for i in range(len(elem)-1):
             bigrams.append(elem[i:i+2])
-
+    
+    # starts with first bi-gram word 
     result = BiGramInvertedIndex[bigrams[0]]
+    
+    # updates(takes intersection) of the result for all the possible bi-grams of the query
     for i in range(1, len(bigrams)):
+        # set to remove duplicates
         result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
         temp = set(BiGramInvertedIndex[bigrams[i]])
+        
+        # taking intersection of bi-grams
         result = result.intersection(temp)
         result = list(result)
 
+    # returns bi-grams 
     return result
 
 def BigramSearch(words):
+    '''Bi-gram search function'''
+    
     result = InvertedIndex1[words[0]]
     for i in range(1, len(words)):
+        # set to remove duplicates
         result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
         temp = set(InvertedIndex1[words[i]])
+        
+        # taking union of all the queries which satisifed
         result = result.union(temp)
         result = list(result)
     
+    # returns list containing biGram matches
     return result
 
-
 def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
-    # Function for booleanQuery search
-    # Input is Pre-processed query string and inverted index table
-    # Returns the result
-    
+    '''Used for boolean query search'''
     stack = []
     
     for query in PreprocessedQueryString.split():
@@ -272,6 +253,7 @@ def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
 
     # while stack is not empty
     while(stack):
+        
         # top element in the stack
         popped_elem = stack.pop()
         
@@ -291,20 +273,28 @@ def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
         
     ResultDocumentSet = intermediateResult
 
+    # returns
     return ResultDocumentSet
 
 def unaryNot(documentSet):
+    '''Unary not search'''
     allDocs = set([document for document in range(1, documentCount+1)])
     return list(allDocs.difference(set(documentSet)))
 
 def booleanOr(DocumentSet1, DocumentSet2):
+    '''Boolean or search'''
     DocumentSet1 = set(DocumentSet1)
     DocumentSet2 = set(DocumentSet2)
+    
+    # returns union of docIDs containing the query(s)
     return list(DocumentSet1.union(DocumentSet2))
 
 def booleanAnd(DocumentSet1, DocumentSet2):
+    '''Boolean and search'''
     DocumentSet1 = set(DocumentSet1)
     DocumentSet2 = set(DocumentSet2)
+    
+    # returns intersection of docIDs containing the queries
     return list(DocumentSet1.intersection(DocumentSet2))
 
 
@@ -312,17 +302,20 @@ InvertedIndex1, BiGramInvertedIndex = InvertedIndex(documentList)
 '''Making the Inverted Index table and BiGram Inverted Index table for the docs in the corpsus'''
 
 # Driver code
-print("Welcome to our Tolerant Boolean Retrieval System (with spelling correction)")
+print("Welcome to our Tolerant Boolean Retrieval System (with spelling correction)\n")
 
 choice = int(input("Press 1 for a new query, 0 to quit: "))
 while(True):
     if(choice == 1):
         query = input("Enter your query: ")
-        print()
+        
         preProcessedQuery = QueryPreProccess(query)
+        
         print("The query being run is: ", preProcessedQuery)
-        print()
+        
+        # parsing thru the complete query
         for word in preProcessedQuery.split():
+            # determing if any wildcard requests in the query
             if '*' in word:
                 wordSet = BigramQuery(word)
                 bigramDocList = list(set(BigramSearch(wordSet)))
@@ -331,7 +324,6 @@ while(True):
         finalDocList = ParseBoolean(preProcessedQuery, InvertedIndex1)
         print('\n')
         print("The retreived documents that match your query are: ")
-        print()
         for i in finalDocList:
             print(documentList[i])
 
@@ -344,4 +336,4 @@ while(True):
     
     choice = int(input("Press 1 for a new query, 0 to quit: "))
 
-print("You chose to quit. Thank you")
+print("You chose to quit. Thank you\n\n")

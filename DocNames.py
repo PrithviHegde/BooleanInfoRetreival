@@ -1,4 +1,5 @@
 import os
+from unittest import result
 import nltk
 import pprint
 import re
@@ -28,32 +29,23 @@ for i in dirList:
 #print(documentList[15])
 ################################################
 documentCount = len(documentList)
+''' Number of documents '''
 
 
-''' 
-Query input function, input is the query and returns the individual words of query in a list.
-for example: 
-calpurnia AND ceasar --> ['calpurnia', 'and', 'ceasar']
-Calpurnia AND Ceasar OR NOT Brutus --> ['calpurnia', 'and', 'ceasar', 'or', 'not', 'brutus']
+# Query input function, input is the query and returns the individual words of query in a list.
+# for example: 
+# calpurnia AND ceasar --> ['calpurnia', 'and', 'ceasar']
+# Calpurnia AND Ceasar OR NOT Brutus --> ['calpurnia', 'and', 'ceasar', 'or', 'not', 'brutus']
 
-Query priority is as given in the following example
-Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
+# Query priority is as given in the following example
+# Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
 
-subQueries: 
-1. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
-2. calpurnia, and, not, ceasar --> subQueries = [calpurnia, and, (not, ceasar)]
-3. not, calpurnia, and, not ceasar --> subQueries = [(not, calpurina), and, (not, ceasar)]
-4. subqery, and, calpurnia 
-'''
-def inputQuery(query):
-    query = input("Enter your query: ")
-    queryList = []
+# subQueries: 
+# 1. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
+# 2. calpurnia, and, not, ceasar --> subQueries = [calpurnia, and, (not, ceasar)]
+# 3. not, calpurnia, and, not ceasar --> subQueries = [(not, calpurina), and, (not, ceasar)]
+# 4. subqery, and, calpurnia 
 
-    # splits on space
-    for q in query.split():
-        queryList.append(q.lower())
-    # queryList now contains the individual words of the query
-    return queryList
 
 # using the stopwords provided in nltk package?
 stopWords = set(nltk.corpus.stopwords.words('english'))
@@ -61,6 +53,7 @@ stopWords = set(nltk.corpus.stopwords.words('english'))
 ''' InvertedIndex function, input is the document list in the corpus and returns inverted index table(dictionary) '''
 def InvertedIndex(documentList):
     InvertedIndexTable = {}
+    BiGramInvertedIndex = {}
     for docID in documentList:
         # opens and read the doc accessed thru docID
         fo = open(str(documentList[docID]))
@@ -76,7 +69,15 @@ def InvertedIndex(documentList):
             # skipping the word if it is a stopword
             if lemmatizedWord in stopWords:
                 continue
-            
+            biwordinput = '$' + lemmatizedWord + '$'
+            if biwordinput == '$$':
+                continue
+            for i in range(len(biwordinput) - 1):
+                biword = biwordinput[i:i+2]
+                if biword in BiGramInvertedIndex:
+                    BiGramInvertedIndex[biword].append(lemmatizedWord)
+                else:
+                    BiGramInvertedIndex[biword] = [lemmatizedWord]
             # if lemmatized word not present in the inverted index table
             #   then lemmatized words as key and the docID of doc containing it
             #   (values of docID is a set to ensuring no duplicates)
@@ -91,21 +92,19 @@ def InvertedIndex(documentList):
         InvertedIndexTable[word] = list(InvertedIndexTable[word])
         
     # returning the complete inverted index table
-    return InvertedIndexTable
+    return InvertedIndexTable, BiGramInvertedIndex
 
 
-# making the invertedIndexTable of the docs in the corpus
-InvertedIndex1 = InvertedIndex(documentList)
 
-''' 
-Function to calculate the LevenshteinDistance or the mininum edit distance;
-used for spell check
-takes two strings as input, 
-    str1 --> first word
-    str2 --> second word;
-returns the levenshtein distance between str1 and str2
-'''
+InvertedIndex1,BiGramInvertedIndex = InvertedIndex(documentList)
+'''Making the invertedIndexTable of the docs in the corpus'''
+
 def LevenshteinDistance(str1, str2):
+# Function to calculate the LevenshteinDistance or the mininum edit distance; 
+# used for spell check takes two strings as input, 
+# str1 –> first word s
+# tr2 –> second word; 
+
     str1Length = len(str1)
     str2Length = len(str2)
 
@@ -120,22 +119,19 @@ def LevenshteinDistance(str1, str2):
     for i in range(1,str1Length+1):
         for j in range(1,str2Length+1):
             LevenshteinArray[i][j] = min(LevenshteinArray[i-1][j-1] + (0 if str1[i-1] == str2[j-1] else 1), (LevenshteinArray[i-1][j] +1), (LevenshteinArray[i][j-1] +1))
-
+    # returns the levenshtein distance between str1 and str2
     return LevenshteinArray[str1Length][str2Length]
 
-'''
-Function to pre-process the query.
-Input is the raw query.
-Query is processed the same way as the words from the doc corpus
-Query goes thru spell check using the levenshtein distance between the query word and words present in the inverted index table
-Return the querywords as a list after spell correction and removing the stop words, bit operation words 
-'''
+
+
 def normalQuery(rawQuery):
+    # funciton pre-processs the rawQuery
     # Spaces, special chars and numbers removed from the query (as they were removed when making the inverted index table)
     words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\*\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawQuery)
     ind = 0
     
     # lemmatizing the words in query
+    # Query is processed the same way as the words from the doc corpus
     for word in words:
         lemmatizedWord = lemmatizer.lemmatize(word)
         lemmatizedWord = lemmatizedWord.lower()
@@ -177,6 +173,7 @@ def normalQuery(rawQuery):
     # removes the extra space after the last word
     resultStr.strip()
     
+    # Returns the querywords as a list after spell correction and removing the stop words, bit operation words 
     return resultStr
     
 ''' Trie class and TrieNode '''
@@ -235,19 +232,51 @@ class Trie:
         return pCrawl.isEndOfWord
 
 t = Trie()
+''' trie '''
 # for key in InvertedIndex1:
     # if key.isalpha():
         # t.insert(key)
 # print(t.search("erafwevgwer"))
 
+'''
+def WildCard(query):
+    
 
+
+    return queryString
 '''
-Function for booleanQuery search
-Input is Pre-processed query string and inverted index table
-Returns 
-'''
+def BigramQuery(word):
+    word = '$' + word + '$'
+    wordList = word.split('*')
+    bigrams = []
+    for elem in wordList:
+        for i in range(len(elem)-1):
+            bigrams.append(elem[i:i+2])
+
+    result = BiGramInvertedIndex[bigrams[0]]
+    for i in range(1, len(bigrams)):
+        result = set(result)
+        temp = set(BiGramInvertedIndex[bigrams[i]])
+        result = result.intersection(temp)
+        result = list(result)
+
+    return result
+
+def BigramSearch(words):
+    result = InvertedIndex1[words[0]]
+    for i in range(1, len(words)):
+        result = set(result)
+        temp = set(InvertedIndex1[words[i]])
+        result = result.union(temp)
+        result = list(result)
+    return result
+
+
 def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
-    # stack
+    # Function for booleanQuery search
+    # Input is Pre-processed query string and inverted index table
+    # Returns the result
+    
     stack = []
     
     for query in PreprocessedQueryString.split():
@@ -300,10 +329,12 @@ def booleanAnd(DocumentSet1, DocumentSet2):
 query = input("Enter a query: ")
 
 # preprocessing the query
-preprocessedQuery = normalQuery(query)
+'''preprocessedQuery = normalQuery(query)
 
 print("Showing Results for: ", preprocessedQuery)
 
 # 
-print(ParseBoolean(preprocessedQuery, InvertedIndex1))
+print(ParseBoolean(preprocessedQuery, InvertedIndex1))'''
+print(BigramSearch(BigramQuery(query)))
+
 

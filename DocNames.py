@@ -1,10 +1,28 @@
+''' 
+Boolean Information Retreival System
+ 
+Query priority is as given in the following example
+
+Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
+subQueries: 
+
+1. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
+
+2. calpurnia, and, not, ceasar --> subQueries = [calpurnia, and, (not, ceasar)]
+
+3. not, calpurnia, and, not ceasar --> subQueries = [(not, calpurina), and, (not, ceasar)]
+
+4. subqery, and, calpurnia 
+
+'''
+
+from ast import parse
 import os
 from unittest import result
 import nltk
 import pprint
 import re
 
-#ps = nltk.PorterStemmer()
 # naming the lemmatizer
 lemmatizer = nltk.WordNetLemmatizer()
 
@@ -18,40 +36,25 @@ documentList = {}
 invertedDocumentList = {}
 docCounter = 1
 
-'''  '''
 for i in dirList:
     if(i[-3:] == "txt"):
         documentList[docCounter] = i
         invertedDocumentList[i] = docCounter
         docCounter += 1
 
-#print(documentList, '\n\n\n', invertedDocumentList)
-#print(documentList[15])
-################################################
 documentCount = len(documentList)
 ''' Number of documents '''
-
 
 # Query input function, input is the query and returns the individual words of query in a list.
 # for example: 
 # calpurnia AND ceasar --> ['calpurnia', 'and', 'ceasar']
 # Calpurnia AND Ceasar OR NOT Brutus --> ['calpurnia', 'and', 'ceasar', 'or', 'not', 'brutus']
 
-# Query priority is as given in the following example
-# Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
-
-# subQueries: 
-# 1. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
-# 2. calpurnia, and, not, ceasar --> subQueries = [calpurnia, and, (not, ceasar)]
-# 3. not, calpurnia, and, not ceasar --> subQueries = [(not, calpurina), and, (not, ceasar)]
-# 4. subqery, and, calpurnia 
-
-
 # using the stopwords provided in nltk package?
 stopWords = set(nltk.corpus.stopwords.words('english'))
 
-''' InvertedIndex function, input is the document list in the corpus and returns inverted index table(dictionary) '''
 def InvertedIndex(documentList):
+    # input is the document list in the corpus
     InvertedIndexTable = {}
     BiGramInvertedIndex = {}
     for docID in documentList:
@@ -95,10 +98,6 @@ def InvertedIndex(documentList):
     return InvertedIndexTable, BiGramInvertedIndex
 
 
-
-InvertedIndex1,BiGramInvertedIndex = InvertedIndex(documentList)
-'''Making the invertedIndexTable of the docs in the corpus'''
-
 def LevenshteinDistance(str1, str2):
 # Function to calculate the LevenshteinDistance or the mininum edit distance; 
 # used for spell check takes two strings as input, 
@@ -123,11 +122,10 @@ def LevenshteinDistance(str1, str2):
     return LevenshteinArray[str1Length][str2Length]
 
 
-
-def normalQuery(rawQuery):
+def QueryPreProccess(rawQuery):
     # funciton pre-processs the rawQuery
     # Spaces, special chars and numbers removed from the query (as they were removed when making the inverted index table)
-    words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\*\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawQuery)
+    words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawQuery)
     ind = 0
     
     # lemmatizing the words in query
@@ -137,7 +135,7 @@ def normalQuery(rawQuery):
         lemmatizedWord = lemmatizedWord.lower()
         
         # bit operation as words in the query are ignored
-        if word in ('and', 'or', 'not'):
+        if (word in ('and', 'or', 'not')) or ('*' in word) :
             # index increased as bit operation remain the same after spell check of the queries
             ind += 1
             continue
@@ -231,20 +229,7 @@ class Trie:
  
         return pCrawl.isEndOfWord
 
-t = Trie()
-''' trie '''
-# for key in InvertedIndex1:
-    # if key.isalpha():
-        # t.insert(key)
-# print(t.search("erafwevgwer"))
 
-'''
-def WildCard(query):
-    
-
-
-    return queryString
-'''
 def BigramQuery(word):
     word = '$' + word + '$'
     wordList = word.split('*')
@@ -269,6 +254,7 @@ def BigramSearch(words):
         temp = set(InvertedIndex1[words[i]])
         result = result.union(temp)
         result = list(result)
+    
     return result
 
 
@@ -322,19 +308,40 @@ def booleanAnd(DocumentSet1, DocumentSet2):
     return list(DocumentSet1.intersection(DocumentSet2))
 
 
+InvertedIndex1, BiGramInvertedIndex = InvertedIndex(documentList)
+'''Making the Inverted Index table and BiGram Inverted Index table for the docs in the corpsus'''
 
 # Driver code
+print("Welcome to our Tolerant Boolean Retrieval System (with spelling correction)")
 
-# get query input
-query = input("Enter a query: ")
+choice = int(input("Press 1 for a new query, 0 to quit: "))
+while(True):
+    if(choice == 1):
+        query = input("Enter your query: ")
+        print()
+        preProcessedQuery = QueryPreProccess(query)
+        print("The query being run is: ", preProcessedQuery)
+        print()
+        for word in preProcessedQuery.split():
+            if '*' in word:
+                wordSet = BigramQuery(word)
+                bigramDocList = list(set(BigramSearch(wordSet)))
+                InvertedIndex1[word] = bigramDocList
 
-# preprocessing the query
-'''preprocessedQuery = normalQuery(query)
+        finalDocList = ParseBoolean(preProcessedQuery, InvertedIndex1)
+        print('\n')
+        print("The retreived documents that match your query are: ")
+        print()
+        for i in finalDocList:
+            print(documentList[i])
 
-print("Showing Results for: ", preprocessedQuery)
+        print("\n\n\n\n")
 
-# 
-print(ParseBoolean(preprocessedQuery, InvertedIndex1))'''
-print(BigramSearch(BigramQuery(query)))
+    elif choice == 0:
+        break
+    else:
+        print("\nInvalid input; Please try again")
+    
+    choice = int(input("Press 1 for a new query, 0 to quit: "))
 
-
+print("You chose to quit. Thank you")

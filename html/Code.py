@@ -60,6 +60,7 @@ documentCount = len(documentList)
 stopWords = set(nltk.corpus.stopwords.words('english'))
 stopWords.remove("and")
 stopWords.remove("not")
+stopWords.remove("or")
 
 def InvertedIndex(documentList):
     '''Makes a inverted index table and a bigram inverted index table for the documents in the corpus'''
@@ -338,6 +339,7 @@ while(True):
                 InvertedIndex1[word] = bigramDocList
 
         finalDocList = ParseBoolean(preProcessedQuery, InvertedIndex1)
+        print(finalDocList)
         print('\n')
         print("The retreived documents that match your query are: ")
         for i in finalDocList:

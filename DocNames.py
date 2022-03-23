@@ -3,16 +3,11 @@ Boolean Information Retreival System
  
 Query priority is as given in the following example
 
-Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
-subQueries: 
+1. Calpurnia and Ceasar or not Brutus --> (Calpurnia and Caesar) or not Brutus
 
-1. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
-
-2. calpurnia, and, not, ceasar --> subQueries = [calpurnia, and, (not, ceasar)]
+2. calpurnia, and, ceasar --> subQueries = [calpurnia, and, ceasar]
 
 3. not, calpurnia, and, not ceasar --> subQueries = [(not, calpurina), and, (not, ceasar)]
-
-4. subqery, and, calpurnia 
 
 '''
 
@@ -22,6 +17,11 @@ from unittest import result
 import nltk
 import pprint
 import re
+
+# downloads
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 # naming the lemmatizer
 lemmatizer = nltk.WordNetLemmatizer()
@@ -45,11 +45,6 @@ for file in dirList:
 
 # number of documents
 documentCount = len(documentList)
-
-# Query input function, input is the query and returns the individual words of query in a list.
-# for example: 
-# calpurnia AND ceasar --> ['calpurnia', 'and', 'ceasar']
-# Calpurnia AND Ceasar OR NOT Brutus --> ['calpurnia', 'and', 'ceasar', 'or', 'not', 'brutus']
 
 # using the stopwords provided in nltk package
 stopWords = set(nltk.corpus.stopwords.words('english'))
@@ -277,12 +272,12 @@ def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
     return ResultDocumentSet
 
 def unaryNot(documentSet):
-    '''Unary not search'''
+    '''Unary NOT search'''
     allDocs = set([document for document in range(1, documentCount+1)])
     return list(allDocs.difference(set(documentSet)))
 
 def booleanOr(DocumentSet1, DocumentSet2):
-    '''Boolean or search'''
+    '''Boolean OR search'''
     DocumentSet1 = set(DocumentSet1)
     DocumentSet2 = set(DocumentSet2)
     
@@ -290,7 +285,7 @@ def booleanOr(DocumentSet1, DocumentSet2):
     return list(DocumentSet1.union(DocumentSet2))
 
 def booleanAnd(DocumentSet1, DocumentSet2):
-    '''Boolean and search'''
+    '''Boolean AND search'''
     DocumentSet1 = set(DocumentSet1)
     DocumentSet2 = set(DocumentSet2)
     

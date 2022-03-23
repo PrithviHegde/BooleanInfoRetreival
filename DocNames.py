@@ -48,6 +48,8 @@ documentCount = len(documentList)
 
 # using the stopwords provided in nltk package
 stopWords = set(nltk.corpus.stopwords.words('english'))
+stopWords.remove("and")
+stopWords.remove("not")
 
 def InvertedIndex(documentList):
     '''Makes a inverted index table and a bigram inverted index table for the documents in the corpus'''
@@ -138,12 +140,21 @@ def QueryPreProccess(rawQuery):
     words = re.split(r"[\. \\\,\/\?\!\@\#\$\%\^\&\(\)\:\{\[\]\}\<\>\t\r\`\~\n\=\:\-\"\'\;\d]", rawQuery)
     ind = 0
     
+    stoplessWords = []
+
+
+
     # lemmatizing the words in query
     # Query is processed the same way as the words from the doc corpus
     for word in words:
         lemmatizedWord = lemmatizer.lemmatize(word)
         lemmatizedWord = lemmatizedWord.lower()
-        
+        if word not in stopWords:
+            stoplessWords.append(word)
+    
+    words = stoplessWords
+
+    for word in words:
         # boolean operation as words and wildcard query symbol(*) in the query are ignored
         if (word in ('and', 'or', 'not')) or ('*' in word) :
             # index increased 

@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>DocNames API documentation</title>
+<meta name="description" content="Boolean Information Retreival System …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>DocNames</code></h1>
+</header>
+<section id="section-intro">
+<p>Boolean Information Retreival System</p>
+<p>There are the following features / pre-processing steps:</p>
+<ol>
+<li>
+<p>Stopword Removal: Removes the common stop words from the corpus.</p>
+</li>
+<li>
+<p>Lemmatization: Employs for normalisation.</p>
+</li>
+<li>
+<p>Wildcard Query Handling: Using bi-gram</p>
+</li>
+<li>
+<p>Spelling Correction: Edit Distance Method/ Levenshtein Distance used to correct misspelled words.</p>
+</li>
+</ol>
+<p>Query priority is as given in the following example</p>
+<ol>
+<li>
+<p>Calpurnia and Ceasar or not Brutus &ndash;&gt; (Calpurnia and Caesar) or not Brutus</p>
+</li>
+<li>
+<p>calpurnia, and, ceasar &ndash;&gt; subQueries = [calpurnia, and, ceasar]</p>
+</li>
+<li>
+<p>not, calpurnia, and, not ceasar &ndash;&gt; subQueries = [(not, calpurina), and, (not, ceasar)]</p>
+</li>
+</ol>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#39;&#39;&#39; 
+Boolean Information Retreival System
+
+There are the following features / pre-processing steps:
+
+1. Stopword Removal: Removes the common stop words from the corpus.
+
+2. Lemmatization: Employs for normalisation.
+
+3. Wildcard Query Handling: Using bi-gram
+
+4. Spelling Correction: Edit Distance Method/ Levenshtein Distance used to correct misspelled words.
+ 
+Query priority is as given in the following example
+
+1. Calpurnia and Ceasar or not Brutus --&gt; (Calpurnia and Caesar) or not Brutus
+
+2. calpurnia, and, ceasar --&gt; subQueries = [calpurnia, and, ceasar]
+
+3. not, calpurnia, and, not ceasar --&gt; subQueries = [(not, calpurina), and, (not, ceasar)]
+
+&#39;&#39;&#39;
+
+from ast import parse
+import os
+from unittest import result
+import nltk
+import pprint
+import re
+
+# downloads
+nltk.download(&#39;stopwords&#39;)
+nltk.download(&#39;wordnet&#39;)
+nltk.download(&#39;omw-1.4&#39;)
+
+# naming the lemmatizer
+lemmatizer = nltk.WordNetLemmatizer()
+
+dirList = os.listdir()
+&#39;&#39;&#39; Store names of files in dictionaries &#39;&#39;&#39;
+
+# dictionary with documentID as key
+documentList = {}
+
+# dictionary with documentName as key, stores the inverted document list
+invertedDocumentList = {}
+docCounter = 1
+
+for file in dirList:
+    # if txt file then 
+    if(file[-3:] == &#34;txt&#34;):
+        documentList[docCounter] = file
+        invertedDocumentList[file] = docCounter
+        docCounter += 1
+
+# number of documents
+documentCount = len(documentList)
+
+# using the stopwords provided in nltk package
+stopWords = set(nltk.corpus.stopwords.words(&#39;english&#39;))
+
+def InvertedIndex(documentList):
+    &#39;&#39;&#39;Makes a inverted index table and a bigram inverted index table for the documents in the corpus&#39;&#39;&#39;
+    # input is the document list in the corpus
+    InvertedIndexTable = {}
+    BiGramInvertedIndex = {}
+    
+    for docID in documentList:
+        # opens and read the doc accessed thru docID
+        fo = open(str(documentList[docID]))
+        rawText = fo.read()
+        
+        # splits on the spaces, special chars and numbers in the docs
+        words = re.split(r&#34;[\. \\\,\/\?\!\@\#\$\%\^\&amp;\*\(\)\:\{\[\]\}\&lt;\&gt;\t\r\`\~\n\=\:\-\&#34;\&#39;\;\d]&#34;, rawText)
+        
+        # lemmatizing the words obtained from the doc after spliting
+        for word in words:
+            lemmatizedWord = lemmatizer.lemmatize(word)
+            lemmatizedWord = lemmatizedWord.lower()
+            
+            # skipping the word if it is a stopword
+            if lemmatizedWord in stopWords:
+                continue
+            
+            # editing word for bigram inverted index table
+            # adding &#39;$&#39; as prefix and suffix to lemmatized word
+            biwordinput = &#39;$&#39; + lemmatizedWord + &#39;$&#39;
+            
+            # if empty string, move to next word
+            if biwordinput == &#39;$$&#39;:
+                continue
+            
+            # creating a bigram inverted index table
+            for i in range(len(biwordinput) - 1):
+                biword = biwordinput[i:i+2]
+                # if bigram word already present, then append the satisfying the lemmatized word 
+                # else bigram not present, add 
+                if biword in BiGramInvertedIndex:
+                    BiGramInvertedIndex[biword].append(lemmatizedWord)
+                else:
+                    BiGramInvertedIndex[biword] = [lemmatizedWord]
+            
+            # creating inverted index table
+            # if lemmatized word present, then add the docID of doc containing the lemmatized word(key)
+            # else append the docID of doc to lemmatized word as key
+            # values of docID is a set to ensuring no duplicates
+            if lemmatizedWord in InvertedIndexTable:
+                InvertedIndexTable[lemmatizedWord].add(docID)
+            else:
+                InvertedIndexTable[lemmatizedWord] = set([docID])  
+    
+    # converting the docIDs set to docIDs list in the dictionary
+    for word in InvertedIndexTable:
+        InvertedIndexTable[word] = list(InvertedIndexTable[word])
+        
+    # returns inverted index table and biGram inverted index table
+    return InvertedIndexTable, BiGramInvertedIndex
+
+
+def LevenshteinDistance(str1, str2):
+    &#39;&#39;&#39;Calculates the LevenshteinDistance or the mininum edit distance&#39;&#39;&#39;
+    
+    # str1 –&gt; first word input
+    # str2 –&gt; second word input; 
+    str1Length = len(str1)
+    str2Length = len(str2)
+
+    # initalizing the matrix for calculating the levenshtein distance
+    LevenshteinArray = [[0 for i in range(str2Length+1)] for j in range(str1Length + 1)]
+    for i in range(1,str1Length+1):
+        LevenshteinArray[i][0] = i
+    for i in range(1,str2Length+1):
+        LevenshteinArray[0][i] = i
+    
+    # recursive function to calculate the levenshtein distance
+    for i in range(1,str1Length+1):
+        for j in range(1,str2Length+1):
+            LevenshteinArray[i][j] = min(LevenshteinArray[i-1][j-1] + (0 if str1[i-1] == str2[j-1] else 1), (LevenshteinArray[i-1][j] +1), (LevenshteinArray[i][j-1] +1))
+            
+    # returns the levenshtein distance between str1 and str2
+    return LevenshteinArray[str1Length][str2Length]
+
+
+def QueryPreProccess(rawQuery):
+    &#39;&#39;&#39;Pre-processses the rawQuery&#39;&#39;&#39;
+    
+    # Spaces, special chars and numbers removed from the query (as they were removed when making the inverted index table)
+    words = re.split(r&#34;[\. \\\,\/\?\!\@\#\$\%\^\&amp;\(\)\:\{\[\]\}\&lt;\&gt;\t\r\`\~\n\=\:\-\&#34;\&#39;\;\d]&#34;, rawQuery)
+    ind = 0
+    
+    # lemmatizing the words in query
+    # Query is processed the same way as the words from the doc corpus
+    for word in words:
+        lemmatizedWord = lemmatizer.lemmatize(word)
+        lemmatizedWord = lemmatizedWord.lower()
+        
+        # boolean operation as words and wildcard query symbol(*) in the query are ignored
+        if (word in (&#39;and&#39;, &#39;or&#39;, &#39;not&#39;)) or (&#39;*&#39; in word) :
+            # index increased 
+            ind += 1
+            continue
+
+        # ans stores the updated queryWord with it&#39;s levenshtein distance with the orginial queryWord
+        ans = (None, None)
+        
+        for dictword in InvertedIndex1:
+            
+            # calculating the levenshtein distance of queryWord and word in the inverted index table
+            dist = LevenshteinDistance(word,dictword)
+            
+            # updates the queryWord with word in inverted index table with minimun levenshtein distance 
+            if (ans[1] == None) or (dist &lt;= ans[1]):
+                ans = (dictword, dist)
+        
+        # stores the updated queryWord after spell correction(min levenshtein distance)
+        words[ind] = ans[0]
+        ind += 1
+    
+    # final query after skipping stop words and the boolean operation words
+    # contains the main queryWords after spell correction
+    finalWordList = []
+    for word in words:
+        if (word not in stopWords) or (word in (&#39;and&#39;,&#39;or&#39;,&#39;not&#39;)):
+            finalWordList.append(word)
+            
+    # final queryWords to be searched in the corpus
+    resultStr = &#39;&#39;
+    for word in finalWordList:
+        resultStr += word + &#39; &#39;
+        
+    # removes the extra space after the last word
+    resultStr.strip()
+    
+    # Returns the querywords as a list after spell correction 
+    # and removed the stop words, boolean operation words 
+    return resultStr
+     
+def BigramQuery(word):
+    &#39;&#39;&#39;Converting input wildcard query for Bi-Gram Query search&#39;&#39;&#39;
+    # making the query ready for bigram search
+    word = &#39;$&#39; + word + &#39;$&#39;
+    
+    # splits on &#39;*&#39; for wildcard query searches
+    wordList = word.split(&#39;*&#39;)
+    
+    # empty list
+    bigrams = []
+    
+    # making bigrams from the input wildcardQuery
+    for elem in wordList:
+        for i in range(len(elem)-1):
+            bigrams.append(elem[i:i+2])
+    
+    # starts with first bi-gram word 
+    result = BiGramInvertedIndex[bigrams[0]]
+    
+    # updates(takes intersection) of the result for all the possible bi-grams of the query
+    for i in range(1, len(bigrams)):
+        # set to remove duplicates
+        result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
+        temp = set(BiGramInvertedIndex[bigrams[i]])
+        
+        # taking intersection of bi-grams
+        result = result.intersection(temp)
+        result = list(result)
+
+    # returns bi-grams 
+    return result
+
+def BigramSearch(words):
+    &#39;&#39;&#39;Bi-gram search function&#39;&#39;&#39;
+    
+    result = InvertedIndex1[words[0]]
+    for i in range(1, len(words)):
+        # set to remove duplicates
+        result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
+        temp = set(InvertedIndex1[words[i]])
+        
+        # taking union of all the queries which satisifed
+        result = result.union(temp)
+        result = list(result)
+    
+    # returns list containing biGram matches
+    return result
+
+def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
+    &#39;&#39;&#39;Used for boolean query search&#39;&#39;&#39;
+    stack = []
+    
+    for query in PreprocessedQueryString.split():
+        stack.append(query)
+    
+    intermediateResult = invertedIndexTable[stack.pop()]
+
+    # while stack is not empty
+    while(stack):
+        
+        # top element in the stack
+        popped_elem = stack.pop()
+        
+        if(popped_elem == &#34;not&#34;):
+            intermediateResult = unaryNot(intermediateResult)
+            continue
+        
+        elif(popped_elem == &#34;or&#34;):
+            temporaryResult = invertedIndexTable[stack.pop()]
+            intermediateResult = booleanOr(intermediateResult, temporaryResult)
+            continue
+        
+        elif(popped_elem == &#34;and&#34;):
+            temporaryResult = invertedIndexTable[stack.pop()]
+            intermediateResult = booleanAnd(intermediateResult, temporaryResult)
+            continue
+        
+    ResultDocumentSet = intermediateResult
+
+    # returns
+    return ResultDocumentSet
+
+def unaryNot(documentSet):
+    &#39;&#39;&#39;Unary NOT search&#39;&#39;&#39;
+    allDocs = set([document for document in range(1, documentCount+1)])
+    return list(allDocs.difference(set(documentSet)))
+
+def booleanOr(DocumentSet1, DocumentSet2):
+    &#39;&#39;&#39;Boolean OR search&#39;&#39;&#39;
+    DocumentSet1 = set(DocumentSet1)
+    DocumentSet2 = set(DocumentSet2)
+    
+    # returns union of docIDs containing the query(s)
+    return list(DocumentSet1.union(DocumentSet2))
+
+def booleanAnd(DocumentSet1, DocumentSet2):
+    &#39;&#39;&#39;Boolean AND search&#39;&#39;&#39;
+    DocumentSet1 = set(DocumentSet1)
+    DocumentSet2 = set(DocumentSet2)
+    
+    # returns intersection of docIDs containing the queries
+    return list(DocumentSet1.intersection(DocumentSet2))
+
+
+InvertedIndex1, BiGramInvertedIndex = InvertedIndex(documentList)
+&#39;&#39;&#39;Making the Inverted Index table and BiGram Inverted Index table for the docs in the corpsus&#39;&#39;&#39;
+
+# Driver code
+print(&#34;Welcome to our Tolerant Boolean Retrieval System (with spelling correction)\n&#34;)
+
+choice = int(input(&#34;Press 1 for a new query, 0 to quit: &#34;))
+while(True):
+    if(choice == 1):
+        query = input(&#34;Enter your query: &#34;)
+        
+        preProcessedQuery = QueryPreProccess(query)
+        
+        print(&#34;The query being run is: &#34;, preProcessedQuery)
+        
+        # parsing thru the complete query
+        for word in preProcessedQuery.split():
+            # determing if any wildcard requests in the query
+            if &#39;*&#39; in word:
+                wordSet = BigramQuery(word)
+                bigramDocList = list(set(BigramSearch(wordSet)))
+                InvertedIndex1[word] = bigramDocList
+
+        finalDocList = ParseBoolean(preProcessedQuery, InvertedIndex1)
+        print(&#39;\n&#39;)
+        print(&#34;The retreived documents that match your query are: &#34;)
+        for i in finalDocList:
+            print(documentList[i])
+
+        print(&#34;\n\n\n\n&#34;)
+
+    elif choice == 0:
+        break
+    else:
+        print(&#34;\nInvalid input; Please try again&#34;)
+    
+    choice = int(input(&#34;Press 1 for a new query, 0 to quit: &#34;))
+
+print(&#34;You chose to quit. Thank you\n\n&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="DocNames.dirList"><code class="name">var <span class="ident">dirList</span></code></dt>
+<dd>
+<div class="desc"><p>Store names of files in dictionaries</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="DocNames.BigramQuery"><code class="name flex">
+<span>def <span class="ident">BigramQuery</span></span>(<span>word)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converting input wildcard query for Bi-Gram Query search</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def BigramQuery(word):
+    &#39;&#39;&#39;Converting input wildcard query for Bi-Gram Query search&#39;&#39;&#39;
+    # making the query ready for bigram search
+    word = &#39;$&#39; + word + &#39;$&#39;
+    
+    # splits on &#39;*&#39; for wildcard query searches
+    wordList = word.split(&#39;*&#39;)
+    
+    # empty list
+    bigrams = []
+    
+    # making bigrams from the input wildcardQuery
+    for elem in wordList:
+        for i in range(len(elem)-1):
+            bigrams.append(elem[i:i+2])
+    
+    # starts with first bi-gram word 
+    result = BiGramInvertedIndex[bigrams[0]]
+    
+    # updates(takes intersection) of the result for all the possible bi-grams of the query
+    for i in range(1, len(bigrams)):
+        # set to remove duplicates
+        result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
+        temp = set(BiGramInvertedIndex[bigrams[i]])
+        
+        # taking intersection of bi-grams
+        result = result.intersection(temp)
+        result = list(result)
+
+    # returns bi-grams 
+    return result</code></pre>
+</details>
+</dd>
+<dt id="DocNames.BigramSearch"><code class="name flex">
+<span>def <span class="ident">BigramSearch</span></span>(<span>words)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bi-gram search function</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def BigramSearch(words):
+    &#39;&#39;&#39;Bi-gram search function&#39;&#39;&#39;
+    
+    result = InvertedIndex1[words[0]]
+    for i in range(1, len(words)):
+        # set to remove duplicates
+        result = set(result)
+        
+        # temp set to store words satisfying the next bi-gram query 
+        temp = set(InvertedIndex1[words[i]])
+        
+        # taking union of all the queries which satisifed
+        result = result.union(temp)
+        result = list(result)
+    
+    # returns list containing biGram matches
+    return result</code></pre>
+</details>
+</dd>
+<dt id="DocNames.InvertedIndex"><code class="name flex">
+<span>def <span class="ident">InvertedIndex</span></span>(<span>documentList)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes a inverted index table and a bigram inverted index table for the documents in the corpus</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def InvertedIndex(documentList):
+    &#39;&#39;&#39;Makes a inverted index table and a bigram inverted index table for the documents in the corpus&#39;&#39;&#39;
+    # input is the document list in the corpus
+    InvertedIndexTable = {}
+    BiGramInvertedIndex = {}
+    
+    for docID in documentList:
+        # opens and read the doc accessed thru docID
+        fo = open(str(documentList[docID]))
+        rawText = fo.read()
+        
+        # splits on the spaces, special chars and numbers in the docs
+        words = re.split(r&#34;[\. \\\,\/\?\!\@\#\$\%\^\&amp;\*\(\)\:\{\[\]\}\&lt;\&gt;\t\r\`\~\n\=\:\-\&#34;\&#39;\;\d]&#34;, rawText)
+        
+        # lemmatizing the words obtained from the doc after spliting
+        for word in words:
+            lemmatizedWord = lemmatizer.lemmatize(word)
+            lemmatizedWord = lemmatizedWord.lower()
+            
+            # skipping the word if it is a stopword
+            if lemmatizedWord in stopWords:
+                continue
+            
+            # editing word for bigram inverted index table
+            # adding &#39;$&#39; as prefix and suffix to lemmatized word
+            biwordinput = &#39;$&#39; + lemmatizedWord + &#39;$&#39;
+            
+            # if empty string, move to next word
+            if biwordinput == &#39;$$&#39;:
+                continue
+            
+            # creating a bigram inverted index table
+            for i in range(len(biwordinput) - 1):
+                biword = biwordinput[i:i+2]
+                # if bigram word already present, then append the satisfying the lemmatized word 
+                # else bigram not present, add 
+                if biword in BiGramInvertedIndex:
+                    BiGramInvertedIndex[biword].append(lemmatizedWord)
+                else:
+                    BiGramInvertedIndex[biword] = [lemmatizedWord]
+            
+            # creating inverted index table
+            # if lemmatized word present, then add the docID of doc containing the lemmatized word(key)
+            # else append the docID of doc to lemmatized word as key
+            # values of docID is a set to ensuring no duplicates
+            if lemmatizedWord in InvertedIndexTable:
+                InvertedIndexTable[lemmatizedWord].add(docID)
+            else:
+                InvertedIndexTable[lemmatizedWord] = set([docID])  
+    
+    # converting the docIDs set to docIDs list in the dictionary
+    for word in InvertedIndexTable:
+        InvertedIndexTable[word] = list(InvertedIndexTable[word])
+        
+    # returns inverted index table and biGram inverted index table
+    return InvertedIndexTable, BiGramInvertedIndex</code></pre>
+</details>
+</dd>
+<dt id="DocNames.LevenshteinDistance"><code class="name flex">
+<span>def <span class="ident">LevenshteinDistance</span></span>(<span>str1, str2)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculates the LevenshteinDistance or the mininum edit distance</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def LevenshteinDistance(str1, str2):
+    &#39;&#39;&#39;Calculates the LevenshteinDistance or the mininum edit distance&#39;&#39;&#39;
+    
+    # str1 –&gt; first word input
+    # str2 –&gt; second word input; 
+    str1Length = len(str1)
+    str2Length = len(str2)
+
+    # initalizing the matrix for calculating the levenshtein distance
+    LevenshteinArray = [[0 for i in range(str2Length+1)] for j in range(str1Length + 1)]
+    for i in range(1,str1Length+1):
+        LevenshteinArray[i][0] = i
+    for i in range(1,str2Length+1):
+        LevenshteinArray[0][i] = i
+    
+    # recursive function to calculate the levenshtein distance
+    for i in range(1,str1Length+1):
+        for j in range(1,str2Length+1):
+            LevenshteinArray[i][j] = min(LevenshteinArray[i-1][j-1] + (0 if str1[i-1] == str2[j-1] else 1), (LevenshteinArray[i-1][j] +1), (LevenshteinArray[i][j-1] +1))
+            
+    # returns the levenshtein distance between str1 and str2
+    return LevenshteinArray[str1Length][str2Length]</code></pre>
+</details>
+</dd>
+<dt id="DocNames.ParseBoolean"><code class="name flex">
+<span>def <span class="ident">ParseBoolean</span></span>(<span>PreprocessedQueryString, invertedIndexTable)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Used for boolean query search</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ParseBoolean(PreprocessedQueryString, invertedIndexTable):
+    &#39;&#39;&#39;Used for boolean query search&#39;&#39;&#39;
+    stack = []
+    
+    for query in PreprocessedQueryString.split():
+        stack.append(query)
+    
+    intermediateResult = invertedIndexTable[stack.pop()]
+
+    # while stack is not empty
+    while(stack):
+        
+        # top element in the stack
+        popped_elem = stack.pop()
+        
+        if(popped_elem == &#34;not&#34;):
+            intermediateResult = unaryNot(intermediateResult)
+            continue
+        
+        elif(popped_elem == &#34;or&#34;):
+            temporaryResult = invertedIndexTable[stack.pop()]
+            intermediateResult = booleanOr(intermediateResult, temporaryResult)
+            continue
+        
+        elif(popped_elem == &#34;and&#34;):
+            temporaryResult = invertedIndexTable[stack.pop()]
+            intermediateResult = booleanAnd(intermediateResult, temporaryResult)
+            continue
+        
+    ResultDocumentSet = intermediateResult
+
+    # returns
+    return ResultDocumentSet</code></pre>
+</details>
+</dd>
+<dt id="DocNames.QueryPreProccess"><code class="name flex">
+<span>def <span class="ident">QueryPreProccess</span></span>(<span>rawQuery)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Pre-processses the rawQuery</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def QueryPreProccess(rawQuery):
+    &#39;&#39;&#39;Pre-processses the rawQuery&#39;&#39;&#39;
+    
+    # Spaces, special chars and numbers removed from the query (as they were removed when making the inverted index table)
+    words = re.split(r&#34;[\. \\\,\/\?\!\@\#\$\%\^\&amp;\(\)\:\{\[\]\}\&lt;\&gt;\t\r\`\~\n\=\:\-\&#34;\&#39;\;\d]&#34;, rawQuery)
+    ind = 0
+    
+    # lemmatizing the words in query
+    # Query is processed the same way as the words from the doc corpus
+    for word in words:
+        lemmatizedWord = lemmatizer.lemmatize(word)
+        lemmatizedWord = lemmatizedWord.lower()
+        
+        # boolean operation as words and wildcard query symbol(*) in the query are ignored
+        if (word in (&#39;and&#39;, &#39;or&#39;, &#39;not&#39;)) or (&#39;*&#39; in word) :
+            # index increased 
+            ind += 1
+            continue
+
+        # ans stores the updated queryWord with it&#39;s levenshtein distance with the orginial queryWord
+        ans = (None, None)
+        
+        for dictword in InvertedIndex1:
+            
+            # calculating the levenshtein distance of queryWord and word in the inverted index table
+            dist = LevenshteinDistance(word,dictword)
+            
+            # updates the queryWord with word in inverted index table with minimun levenshtein distance 
+            if (ans[1] == None) or (dist &lt;= ans[1]):
+                ans = (dictword, dist)
+        
+        # stores the updated queryWord after spell correction(min levenshtein distance)
+        words[ind] = ans[0]
+        ind += 1
+    
+    # final query after skipping stop words and the boolean operation words
+    # contains the main queryWords after spell correction
+    finalWordList = []
+    for word in words:
+        if (word not in stopWords) or (word in (&#39;and&#39;,&#39;or&#39;,&#39;not&#39;)):
+            finalWordList.append(word)
+            
+    # final queryWords to be searched in the corpus
+    resultStr = &#39;&#39;
+    for word in finalWordList:
+        resultStr += word + &#39; &#39;
+        
+    # removes the extra space after the last word
+    resultStr.strip()
+    
+    # Returns the querywords as a list after spell correction 
+    # and removed the stop words, boolean operation words 
+    return resultStr</code></pre>
+</details>
+</dd>
+<dt id="DocNames.booleanAnd"><code class="name flex">
+<span>def <span class="ident">booleanAnd</span></span>(<span>DocumentSet1, DocumentSet2)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Boolean AND search</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def booleanAnd(DocumentSet1, DocumentSet2):
+    &#39;&#39;&#39;Boolean AND search&#39;&#39;&#39;
+    DocumentSet1 = set(DocumentSet1)
+    DocumentSet2 = set(DocumentSet2)
+    
+    # returns intersection of docIDs containing the queries
+    return list(DocumentSet1.intersection(DocumentSet2))</code></pre>
+</details>
+</dd>
+<dt id="DocNames.booleanOr"><code class="name flex">
+<span>def <span class="ident">booleanOr</span></span>(<span>DocumentSet1, DocumentSet2)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Boolean OR search</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def booleanOr(DocumentSet1, DocumentSet2):
+    &#39;&#39;&#39;Boolean OR search&#39;&#39;&#39;
+    DocumentSet1 = set(DocumentSet1)
+    DocumentSet2 = set(DocumentSet2)
+    
+    # returns union of docIDs containing the query(s)
+    return list(DocumentSet1.union(DocumentSet2))</code></pre>
+</details>
+</dd>
+<dt id="DocNames.unaryNot"><code class="name flex">
+<span>def <span class="ident">unaryNot</span></span>(<span>documentSet)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unary NOT search</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unaryNot(documentSet):
+    &#39;&#39;&#39;Unary NOT search&#39;&#39;&#39;
+    allDocs = set([document for document in range(1, documentCount+1)])
+    return list(allDocs.difference(set(documentSet)))</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="DocNames.dirList" href="#DocNames.dirList">dirList</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="DocNames.BigramQuery" href="#DocNames.BigramQuery">BigramQuery</a></code></li>
+<li><code><a title="DocNames.BigramSearch" href="#DocNames.BigramSearch">BigramSearch</a></code></li>
+<li><code><a title="DocNames.InvertedIndex" href="#DocNames.InvertedIndex">InvertedIndex</a></code></li>
+<li><code><a title="DocNames.LevenshteinDistance" href="#DocNames.LevenshteinDistance">LevenshteinDistance</a></code></li>
+<li><code><a title="DocNames.ParseBoolean" href="#DocNames.ParseBoolean">ParseBoolean</a></code></li>
+<li><code><a title="DocNames.QueryPreProccess" href="#DocNames.QueryPreProccess">QueryPreProccess</a></code></li>
+<li><code><a title="DocNames.booleanAnd" href="#DocNames.booleanAnd">booleanAnd</a></code></li>
+<li><code><a title="DocNames.booleanOr" href="#DocNames.booleanOr">booleanOr</a></code></li>
+<li><code><a title="DocNames.unaryNot" href="#DocNames.unaryNot">unaryNot</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
